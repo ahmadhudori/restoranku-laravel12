@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
 class MenuController extends Controller
@@ -19,5 +20,45 @@ class MenuController extends Controller
 			->orderBy('name', 'asc')->get();
 		
 		return view('customer.menu', compact('items', 'tableNumber'));
+	}
+
+	public function cart()
+	{
+		$cart = Session::get('cart');
+		return view('customer.cart', compact('cart'));
+	}
+
+	public function addToCart(Request $request)
+	{
+		$menuId = $request->input('id');
+		$menu = Item::find($menuId);
+
+		if (!$menu) {
+			return response()->json([
+				'status' => 'error',
+				'message' => 'Menu tidak ditemukan.'
+			]);
+		}
+
+		$cart = Session::get('cart');
+
+		if (isset($cart[$menuId])) {
+			$cart[$menuId]['qty'] += 1;
+		} else {
+			$cart[$menuId] = [
+				'id' => $menu->id,
+				'name' => $menu->name,
+				'image' => $menu->image,
+				'price' => $menu->price,
+				'qty' => 1
+			];
+		}
+
+		Session::put('cart', $cart);
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Menu berhasil ditambahkan ke keranjang.',
+			'cart' => $cart
+		]);
 	}
 }
