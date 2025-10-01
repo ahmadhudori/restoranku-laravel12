@@ -61,4 +61,51 @@ class MenuController extends Controller
 			'cart' => $cart
 		]);
 	}
+
+	public function updateCart(Request $request) {
+		$item = $request->input('id');
+		$newQty = $request->input('qty');
+
+		if ($newQty <= 0) {
+			return response()->json([
+				'success' => false,
+			]);
+		}
+
+		$cart = Session::get('cart');
+		if (isset($cart[$item])) {
+			$cart[$item]['qty'] = $newQty;
+			Session::put('cart', $cart);
+			Session::flash('success', 'Keranjang berhasil diupdate.');
+			return response()->json([
+				'success' => true
+			]);
+		}
+
+		return response()->json([
+			'success' => false
+		]);
+	}
+
+	public function removeCart(Request $request) {
+		$item = $request->input('id');
+		$cart = Session::get('cart');
+		if (isset($cart[$item])) {
+			unset($cart[$item]);
+			Session::put('cart', $cart);
+			Session::flash('success', 'Menu berhasil dihapus dari keranjang.');
+			return response()->json([
+				'success' => true
+			]);
+		}
+		return response()->json([
+			'success' => false
+		]);
+	}
+
+	public function clearCart() {
+		Session::forget('cart');
+		Session::flash('success', 'Keranjang berhasil dikosongkan.');
+		return redirect()->route('cart');
+	}
 }

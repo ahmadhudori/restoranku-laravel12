@@ -54,9 +54,7 @@
 		</div>
 	</div>
 </div>
-@endsection
 
-@section('scripts')
 <script>
 	function addToCart(menuId) {
 		fetch("{{ route('cart.add') }}", {

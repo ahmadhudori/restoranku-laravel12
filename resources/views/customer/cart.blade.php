@@ -32,41 +32,41 @@
 
 					@foreach ($cart as $item)
 						@php
-							$total = $item['price'] * $item['quantity'];
+							$total = $item['price'] * $item['qty'];
 							$subtotal += $total;
 						@endphp
 						<tr>
 							<th scope="row">
 								<div class="d-flex align-items-center">
-									<img src="https://images.unsplash.com/photo-1591325418441-ff678baf78ef" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+									<img src="{{ $item['image'] }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
 								</div>
 							</th>
 							<td>
-								<p class="mb-0 mt-4">Ichiraku Ramen</p>
+								<p class="mb-0 mt-4">{{ $item['name'] }}</p>
 							</td>
 							<td>
-								<p class="mb-0 mt-4">Rp25.000,00</p>
+								<p class="mb-0 mt-4">Rp{{ number_format($item['price'], 0, ',', '.') }}</p>
 							</td>
 							<td>
 								<div class="input-group quantity mt-4" style="width: 100px;">
 									<div class="input-group-btn">
-										<button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+										<button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="updateQuantity({{ $item['id'] }}, -1)" >
 										<i class="fa fa-minus"></i>
 										</button>
 									</div>
-									<input type="text" class="form-control form-control-sm text-center border-0" value="1">
+									<input id="qty-{{ $item['id'] }}" type="text" class="form-control form-control-sm text-center border-0" value="{{ $item['qty'] }}">
 									<div class="input-group-btn">
-										<button class="btn btn-sm btn-plus rounded-circle bg-light border">
+										<button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="updateQuantity({{ $item['id'] }}, 1)">
 											<i class="fa fa-plus"></i>
 										</button>
 									</div>
 								</div>
 							</td>
 							<td>
-								<p class="mb-0 mt-4">Rp25.000,00</p>
+								<p class="mb-0 mt-4">Rp.{{ number_format($total, 0, ',', '.') }}</p>
 							</td>
 							<td>
-								<button class="btn btn-md rounded-circle bg-light border mt-4" >
+								<button class="btn btn-md rounded-circle bg-light border mt-4" onclick="if(confirm('Anda yakin ingin menghapus item ini?')) removeItemFromCart({{ $item['id'] }});" >
 									<i class="fa fa-times text-danger"></i>
 								</button>
 							</td>
@@ -76,7 +76,9 @@
 				</tbody>
 			</table>
 		</div>
-
+		<div class="d-flex justify-content-end">
+			<a href="{{ route('cart.clear') }}" class="btn btn-danger" onclick="return confirm('Anda yakin ingin mengosongkan keranjang?')">Kosongan Keranjang</a>
+		</div>
 			@php
 				$tax = $subtotal * 0.1; // 10% tax
 				$totalAmount = $subtotal + $tax;
@@ -89,23 +91,23 @@
 						<h2 class="display-6 mb-4">Total <span class="fw-normal">Pesanan</span></h2>
 						<div class="d-flex justify-content-between mb-4">
 							<h5 class="mb-0 me-4">Subtotal</h5>
-							<p class="mb-0">Rp85.000,00</p>
+							<p class="mb-0">Rp.{{ number_format($subtotal, 0, ',', '.') }}</p>
 						</div>
 						<div class="d-flex justify-content-between">
 							<p class="mb-0 me-4">Pajak (10%)</p>
 							<div class="">
-								<p class="mb-0">Rp8.500,00</p>
+								<p class="mb-0">Rp.{{ number_format($tax, 0, ',', '.') }}</p>
 							</div>
 						</div>
 					</div>
 					<div class="py-4 mb-4 border-top d-flex justify-content-between">
 						<h4 class="mb-0 ps-4 me-4">Total</h4>
-						<h5 class="mb-0 pe-4">Rp93.500,00</h5>
+						<h5 class="mb-0 pe-4">Rp.{{ number_format($totalAmount, 0, ',', '.') }}</h5>
 					</div>
 					
 				</div>
 				<div class="d-flex justify-content-end">
-					<div class="mb-0 mb-3">
+					<div class=" mb-3">
 						<a href="{{ route('checkout') }}" class="btn border-secondary py-3 text-primary text-uppercase mb-4" type="button">Lanjut ke Pembayaran</a>
 					</div>
 				</div>
@@ -115,4 +117,60 @@
 	</div>
 </div>
 <!-- Cart Page End -->
+@endsection
+
+@section('scripts')
+<script>
+	function updateQuantity(itemId, change) {
+		var qtyInput = $('#qty-' + itemId);
+		var currentQty = parseInt(qtyInput.val());
+		var newQty = currentQty + change;
+		if (newQty <= 0) {
+			if(confirm('Apakah Anda ingin menghapus item ini dari keranjang?')) {
+				removeItemFromCart(itemId);
+			}
+			return;
+		}
+		fetch("{{ route('cart.update') }}", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': '{{ csrf_token() }}'
+			},
+			body: JSON.stringify({ id: itemId, qty: newQty })
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				qtyInput.val(newQty);
+				location.reload();
+			} else {
+				alert(data.message);
+			}
+		})
+		.catch(error => console.error('Error:', error));
+	}
+
+	function removeItemFromCart(itemId) {
+		fetch("{{ route('cart.remove') }}", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': '{{ csrf_token() }}'
+			},
+			body: JSON.stringify({ id: itemId})
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				location.reload();
+			} else {
+				alert(data.message);
+			}
+		})
+		.catch((error) => {
+			alert('Error: Terjadi kesalahan saat menghapus item dari keranjang.');
+		});
+	}
+</script>
 @endsection
