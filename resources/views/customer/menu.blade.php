@@ -1,7 +1,26 @@
 @extends('customer.layouts.master')
 @section('content')
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+	<h1 class="text-center text-white display-6">Menu Kami</h1>
+	<ol class="breadcrumb justify-content-center mb-0">
+		<li class="breadcrumb-item active text-primary">Silakan pilih menu favorit anda</li>
+	</ol>
+</div>
+<!-- Single Page Header End -->
 <div class="container-fluid fruite py-5">
 	<div class="container py-5">
+		@if (session('success'))
+			<div class="alert alert-success alert-dismissible mb-3 fade show" role="alert">
+				{{ session('success') }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		@elseif (session('error'))
+			<div class="alert alert-danger alert-dismissible mb-3 fade show" role="alert">
+				{{ session('error') }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		@endif
 		<div class="row g-4">
 			<div class="col-lg-12">
 				<div class="row g-3">

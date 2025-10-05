@@ -1,11 +1,25 @@
 @extends('customer.layouts.master')
 @section('content')
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+	<h1 class="text-center text-white display-6">Keranjang</h1>
+	<ol class="breadcrumb justify-content-center mb-0">
+		<li class="breadcrumb-item active text-primary">Silakan periksa pesanan anda</li>
+	</ol>
+</div>
+<!-- Single Page Header End -->
 <!-- Cart Page Start -->
 <div class="container-fluid py-5">
 	<div class="container py-5">
 		@if(session('success'))
 			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				{{ session('success') }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		@endif
+		@if(session('error'))
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				{{ session('error') }}
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 		@endif
@@ -38,7 +52,7 @@
 						<tr>
 							<th scope="row">
 								<div class="d-flex align-items-center">
-									<img src="{{ $item['image'] }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+									<img src="{{ asset('img_item_upload/' . $item['image']) }}" onerror="this.onerror=null;this.src='{{ $item['image'] }}';" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
 								</div>
 							</th>
 							<td>
