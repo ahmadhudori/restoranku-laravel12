@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\CategotyController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,4 +23,11 @@ Route::get('/checkout', [MenuController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/store', [MenuController::class, 'checkoutStore'])->name('checkout.store');
 Route::get('/checkout/success/{orderId}', [MenuController::class, 'checkoutSuccess'])->name('checkout.success');
 
-Route::resource('/category', CategotyController::class);
+Route::get('/dashboard', function () {
+	return view('admin.dashboard');
+})->name('dashboard');
+Route::resource('/categories', CategotyController::class);
+Route::resource('/orders', OrderController::class);
+Route::resource('/items', ItemController::class);
+Route::resource('/users', RoleController::class);
+Route::resource('/roles', UserController::class);
