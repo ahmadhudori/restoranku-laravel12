@@ -30,15 +30,15 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<label for="name">Nama Menu</label>
-							<input type="text" class="form-control" id="name" placeholder="Enter nama menu" name="name" value="{{ $item->name, old('name') }}" required>
+							<input type="text" class="form-control" id="name" placeholder="Enter nama menu" name="name" value="{{ old('name', $item->name) }}" required>
 						</div>
 						<div class="form-group">
 							<label for="description">Deskripsi</label>
-							<textarea type="text" class="form-control" id="description" placeholder="Deskripsi" name="description" required>{{ $item->description, old('description') }}</textarea>
+							<textarea type="text" class="form-control" id="description" placeholder="Deskripsi" name="description" required>{{ old('description', $item->description) }}</textarea>
 						</div>
 						<div class="form-group">
 							<label for="price">Harga</label>
-							<input type="number" class="form-control" id="price" placeholder="Harga" name="price" value="{{ $item->price, old('price') }}" step="any" required>
+							<input type="number" class="form-control" id="price" placeholder="Harga" name="price" value="{{ old('price', $item->price) }}" step="any" required>
 						</div>
 						<div class="form-group">
 							<label for="category">Kategori</label>

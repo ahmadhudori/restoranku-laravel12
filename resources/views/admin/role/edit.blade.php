@@ -30,11 +30,11 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<label for="name">Nama Role</label>
-							<input type="text" class="form-control" id="name" placeholder="Enter nama menu" name="role_name" value="{{ $role->role_name, old('role_name') }}" required>
+							<input type="text" class="form-control" id="name" placeholder="Enter nama menu" name="role_name" value="{{ old('role_name', $role->role_name) }}" required>
 						</div>
 						<div class="form-group">
 							<label for="description">Deskripsi</label>
-							<textarea type="text" class="form-control" id="description" placeholder="Deskripsi" name="description" required>{{ $role->description, old('description') }}</textarea>
+							<textarea type="text" class="form-control" id="description" placeholder="Deskripsi" name="description" required>{{ old('description', $role->description) }}</textarea>
 						</div>
 						
 						<div class="form-group mt-5 d-flex justify-content-end">
