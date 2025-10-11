@@ -11,6 +11,17 @@
 </div>
 <div class="card">
 	<div class="card-body">
+		@if ($errors->any())
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<h5 class="alert-heading">Create Failed</h5>
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+		</div>
+		@endif
 		<form action="{{ route('items.store') }}" method="post" enctype="multipart/form-data" class="form form-vertical">
 			@csrf
 			<div class="form-body">
@@ -30,16 +41,16 @@
 						</div>
 						<div class="form-group">
 							<label for="category">Kategori</label>
-							<select name="category" class="form-select" id="category" required>
+							<select name="category_id" class="form-select" id="category" required>
 								<option value="">Pilih Kategori</option>
 								@foreach ($categories as $category)
-									<option value="{{ $category->id }}" {{ old('category') == $category->id ? 'selected' : '' }}>{{ $category->cat_name }}</option>
+									<option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->cat_name }}</option>
 								@endforeach
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="image">Gambar</label>
-							<input type="file" name="image" id="image" class="form-control" required>
+							<input type="file" name="image" id="image" class="form-control">
 						</div>
 						<div class="form-group">
 							<label for="is_avtive">Status</label>

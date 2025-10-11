@@ -21,6 +21,9 @@
     <section class="section">
         <div class="card">
             <div class="card-body">
+				@if (session('success'))
+					<div class="alert alert-success alert-dismissible fade show" role="alert"><p><i class="bi bi-check-circle"></i>  {{ session('success') }}</p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>
+				@endif
                 <table class="table table-striped" id="table1">
 					<thead>
 						<tr>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -11,7 +12,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+		$roles = Role::all();
+        return view('admin.role.index', compact('roles'));
     }
 
     /**
@@ -19,7 +21,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+		return view('admin.role.create');
     }
 
     /**
@@ -27,7 +29,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		$validatedData = $request->validate([
+			'role_name' => 'required|max:255',
+			'description' => 'required',
+		]);
+
+		Role::create($validatedData);
+		return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
     /**
@@ -43,7 +51,8 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::find($id);
+		return view('admin.role.edit', compact('role'));
     }
 
     /**
@@ -51,7 +60,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+		$validatedData = $request->validate([
+			'role_name' => 'required|max:255',
+			'description' => 'required',
+		]);
+
+		Role::findOrfail($id)->update($validatedData);
+		return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
     /**
@@ -59,6 +74,7 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+		Role::findOrfail($id)->delete();
+		return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 }

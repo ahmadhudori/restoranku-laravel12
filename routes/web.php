@@ -29,5 +29,5 @@ Route::get('/dashboard', function () {
 Route::resource('/categories', CategotyController::class);
 Route::resource('/orders', OrderController::class);
 Route::resource('/items', ItemController::class);
-Route::resource('/users', RoleController::class);
-Route::resource('/roles', UserController::class);
+Route::resource('/roles', RoleController::class);
+Route::resource('/users', UserController::class);

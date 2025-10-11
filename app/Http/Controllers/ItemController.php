@@ -31,7 +31,36 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+			'name' => 'required',
+			'description' => 'required|string',
+			'price' => 'required|numeric',
+			'category_id' => 'required|exists:categories,id',
+			'image' => 'sometimes|max:2048|image|mimes:jpg,jpeg,png,gif',
+			'is_active' => 'required|boolean',
+		], [
+			'name.required' => 'Nama menu harus diisi.',
+			'description.required' => 'Deskripsi harus diisi.',
+			'description.string' => 'Deskripsi harus berupa teks.',
+			'price.required' => 'Harga harus diisi.',
+			'price.numeric' => 'Harga harus berupa angka.',
+			'category_id.required' => 'Kategori harus dipilih.',
+			'image.required' => 'Gambar harus diunggah.',
+			'image.max' => 'Ukuran gambar maksimal 2MB.',
+			'image.image' => 'File yang diunggah harus berupa gambar.',
+			'is_active.boolean' => 'Status harus berupa boolean.',
+		]);
+
+		if ($request->hasFile('image')) {
+			$image = $request->file('image');
+			$imageName = time() . '.' . $image->getClientOriginalExtension();
+			$image->move(public_path('img_item_upload'), $imageName);
+
+			$validatedData['image'] = $imageName;
+		}
+
+		$item = Item::create($validatedData);
+		return redirect()->route('items.index')->with('success', 'Menu berhasil ditambahkan.');
     }
 
     /**
@@ -47,7 +76,9 @@ class ItemController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $item = Item::findOrFail($id);
+		$categories = Category::all();
+		return view('admin.Item.edit', compact('item', 'categories'));
     }
 
     /**
@@ -55,7 +86,37 @@ class ItemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+			'name' => 'required',
+			'description' => 'required|string',
+			'price' => 'required|numeric',
+			'category_id' => 'required|exists:categories,id',
+			'image' => 'sometimes|max:2048|image|mimes:jpg,jpeg,png,gif',
+			'is_active' => 'required|boolean',
+		], [
+			'name.required' => 'Nama menu harus diisi.',
+			'description.required' => 'Deskripsi harus diisi.',
+			'description.string' => 'Deskripsi harus berupa teks.',
+			'price.required' => 'Harga harus diisi.',
+			'price.numeric' => 'Harga harus berupa angka.',
+			'category_id.required' => 'Kategori harus dipilih.',
+			'image.required' => 'Gambar harus diunggah.',
+			'image.max' => 'Ukuran gambar maksimal 2MB.',
+			'image.image' => 'File yang diunggah harus berupa gambar.',
+			'is_active.boolean' => 'Status harus berupa boolean.',
+		]);
+
+		if ($request->hasFile('image')) {
+			$image = $request->file('image');
+			$imageName = time() . '.' . $image->getClientOriginalExtension();
+			$image->move(public_path('img_item_upload'), $imageName);
+
+			$validatedData['image'] = $imageName;
+		}
+
+		$item = Item::findOrFail($id);
+		$item->update($validatedData);
+		return redirect()->route('items.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
     /**
@@ -63,6 +124,8 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $item = Item::findOrFail($id);
+		$item->delete();
+		return redirect()->route('items.index')->with('success', 'Menu berhasil dihapus.');
     }
 }
