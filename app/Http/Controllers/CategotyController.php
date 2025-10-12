@@ -21,7 +21,7 @@ class CategotyController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
@@ -29,7 +29,13 @@ class CategotyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		$validatedData = $request->validate([
+			'cat_name' => 'required|max:255',
+			'description' => 'required',
+		]);
+
+		Category::create($validatedData);
+		return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     /**
@@ -45,7 +51,8 @@ class CategotyController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+		return view('admin.category.edit', compact('category'));
     }
 
     /**
@@ -53,7 +60,14 @@ class CategotyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+		$validatedData = $request->validate([
+			'cat_name' => 'required|max:255',
+			'description' => 'required',
+		]);
+
+		$category = Category::findOrFail($id);
+		$category->update($validatedData);
+		return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -61,6 +75,8 @@ class CategotyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+		$category->delete();
+		return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }

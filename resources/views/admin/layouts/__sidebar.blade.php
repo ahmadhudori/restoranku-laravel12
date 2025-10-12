@@ -72,14 +72,14 @@
 
 				<li class="sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
 					<a href="{{ route('roles.index') }}" class='sidebar-link'>
-						<i class="bi bi-person-fill"></i>
+						<i class="bi bi-key-fill"></i>
 						<span>Manajemen Role</span>
 					</a>
 				</li>
 				
-				<li class="sidebar-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
+				<li class="sidebar-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
 					<a href="{{ route('categories.index') }}" class='sidebar-link'>
-						<i class="bi bi-person-fill"></i>
+						<i class="bi bi-tags"></i>
 						<span>Manajemen Kategory</span>
 					</a>
 				</li>

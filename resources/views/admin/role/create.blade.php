@@ -22,7 +22,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
 		</div>
 		@endif
-		<form action="{{ route('roles.store') }}" method="post" enctype="multipart/form-data" class="form form-vertical">
+		<form action="{{ route('roles.store') }}" method="post" class="form form-vertical">
 			@csrf
 			<div class="form-body">
 				<div class="row">
