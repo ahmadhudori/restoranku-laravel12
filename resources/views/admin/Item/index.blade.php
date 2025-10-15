@@ -61,6 +61,19 @@
 									<a href="{{ route('items.edit', $item->id) }}" class="btn btn-sm btn-warning">
 										<i class="bi bi-pencil"></i> Edit
 									</a>
+									<form action="{{ route('items.updateStatus', $item->id) }}" method="post">
+										@csrf
+										@method('PATCH')
+										@if($item->is_active == '1')
+											<button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Apakah Anda yakin ingin menonaktifkan menu ini?')">
+												<i class="bi bi-x-circle"></i> Nonaktifkan
+											</button>
+										@else
+											<button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Apakah Anda yakin ingin mengaktifkan menu ini?')">
+												<i class="bi bi-check-circle"></i> Aktifkan
+											</button>
+										@endif
+									</form>
 									<form action="{{ route('items.destroy', $item->id) }}" method="POST" class="d-inline">
 										@csrf
 										@method('DELETE')

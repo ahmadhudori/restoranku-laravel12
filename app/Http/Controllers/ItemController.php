@@ -128,4 +128,10 @@ class ItemController extends Controller
 		$item->delete();
 		return redirect()->route('items.index')->with('success', 'Menu berhasil dihapus.');
     }
+
+	public function updateStatus(Item $item) {
+		$item->is_active = !$item->is_active;
+		$item->save();
+		return redirect()->route('items.index')->with('success', 'Status menu berhasil diperbarui.');
+	}
 }
