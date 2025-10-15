@@ -136,6 +136,7 @@ class MenuController extends Controller
 			'fullname' => 'required|string|max:255',
 			'nomorWhatsapp' => 'required',
 			'payment_method' => 'required',
+			'note' => 'nullable',
 		]);
 		if ($validator->fails()) {
 			return redirect()->back()->withErrors($validator);
