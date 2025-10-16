@@ -57,6 +57,19 @@
 									<a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-primary">
 										<i class="bi bi-eye"></i> Detail
 									</a>
+									@if (Auth::user()->role->role_name == 'Admin' || Auth::user()->role->role_name == 'Chasier')
+										@if ($order->status == 'pending' && $order->payment_method == 'tunai')
+											<form action="{{ route('orders.updateStatus', $order->id) }}" method="post">
+												@csrf
+												<button type="submit" class="btn btn-sm btn-success">Settlement</button>
+											</form>
+										@endif
+									@elseif (Auth::user()->role->role_name == 'Chef' && $order->status == 'settlement') 
+										<form action="{{ route('orders.updateStatus', $order->id) }}" method="post">
+											@csrf
+											<button type="submit" class="btn btn-sm btn-danger">Cooked</button>
+										</form>
+									@endif
 								</td>
 							</tr>
 						@endforeach

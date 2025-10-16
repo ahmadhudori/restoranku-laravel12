@@ -29,11 +29,12 @@ Route::middleware(['auth', 'role:Admin|Chasier|Chef'])->group(function () {
 	})->name('dashboard');
 	Route::patch('/items/update-status/{item}', [ItemController::class, 'updateStatus'])->name('items.updateStatus');
 	Route::resource('/items', ItemController::class);
+	Route::resource('/orders', OrderController::class);
+	Route::post('/orders/update-status/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {
 	Route::resource('/categories', CategotyController::class);
-	Route::resource('/orders', OrderController::class);
 	Route::resource('/roles', RoleController::class);
 	Route::resource('/users', UserController::class);
 });
