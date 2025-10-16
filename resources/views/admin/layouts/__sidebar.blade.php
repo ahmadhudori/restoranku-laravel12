@@ -83,6 +83,15 @@
 						<span>Manajemen Kategory</span>
 					</a>
 				</li>
+				<li class="sidebar-item {{ request()->routeIs('logout') ? 'active' : '' }}">
+					<form action="{{ route('logout') }}" method="post">
+						@csrf
+						<button type="submit" class='sidebar-link w-100 btn btn-link text-start' onclick="event.preventDefault(); this.closest('form').submit();">
+							<i class="bi bi-box-arrow-right"></i>
+							<span>Log Out</span>
+						</button>
+					</form>
+				</li>
 			</ul>
 		</div>
 	</div>
